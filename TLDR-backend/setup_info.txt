@@ -1,0 +1,16 @@
+py -3 -m venv .venv
+.venv\Scripts\activate.bat 
+
+python -m pip install --upgrade pip
+python -m pip install transformers
+python -m pip install torch
+python -m pip install tensorflow
+python -m pip install bert-extractive-summarizer
+python -m pip install sacremoses
+python -m pip install flask
+python -m pip install flask_cors
+
+set FLASK_APP=app.py
+$env:FLASK_APP = "app.py"
+
+python -m flask run

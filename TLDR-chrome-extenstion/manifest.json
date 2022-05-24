@@ -1,0 +1,11 @@
+{
+    "name": "TLDR | an extractive and abstractive text summarizer",
+    "version": "1.0.0",
+    "description": "Summarize your websites, articles etc. Read and learn faster.",
+    "manifest_version": 3,
+    "author": "Kevin Young",
+    "action":{
+        "default_popup": "index.html",
+        "default_title": "TLDR"
+    }
+}

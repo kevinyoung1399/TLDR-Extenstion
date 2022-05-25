@@ -16,13 +16,53 @@ for (const paragraph of paragraphs) {
     } else {
         let text = convertToPlain(paragraph.innerHTML);
         if (text.length > 20 && text.length < 2000) {
-            // console.log(text)
             texts[num_valid_paragraphs] = text
             summarization_input += text + ' '
             num_valid_paragraphs += 1;
         }
     }
 }
-console.log(summarization_input)
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, response) {
+        if (request.message === "open") {
+            sendInput();
+        }
+        response({
+            data: "Context: We detected you (Popup), text sent."
+        })
+    }
+);
+
+async function sendInput() {
+    chrome.runtime.sendMessage({
+        message: "send_input",
+        summarization_input: summarization_input
+    }, function(response) {
+        console.log(response.data)
+    });
+}
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, response) {
+        if (request.message === "extractive result") {
+            console.log(request.extractiveOutput)
+        } response({
+            data: "Context: We recieved your extractive results. Highlighting paragraph."
+        })
+    }
+);
+
+
+// chrome.runtime.onMessage.addListener(
+//     function(request, sender, sendResponse) {
+//         if (request.message === "autoFill")
+//             autoFill(request.textToFill);
+//     }
+// );
+
+// async function autoFill(textToFill){ // here write your function...
+//     console.log(textToFill)
+// }
 
 // elt.style['background-color'] = '#FF00FF'

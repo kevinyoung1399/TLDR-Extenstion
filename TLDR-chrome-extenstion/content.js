@@ -1,11 +1,19 @@
 console.log('TLDR Extension is ready.')
 
+/**
+ * Convert String of HTML objects into a plain-text paragraph
+ * @param {string} html - a String object of HTML Markup
+ * @returns {string} - Plaintext paragraph with inner HTML tags (e.g. <a>) removed.
+ */
 function convertToPlain(html) {
     let tempDivElement = document.createElement("div");
     tempDivElement.innerHTML = html;
     return tempDivElement.textContent || tempDivElement.innerText || "";
 }
 
+/**
+ * Get the first 5 paragraphs in the web-page to be input for summuraization.
+ */
 const paragraphs = document.getElementsByTagName('p');
 let validTexts = new Array (5);
 // change to camel case
@@ -28,7 +36,54 @@ for (let paragraph of paragraphs) {
     }
 }
 
-function highlightPage(extractiveOutput) {
+/**
+ * Listen in for the popup if ready to collect the input data.
+ */
+ chrome.runtime.onMessage.addListener(
+    function(request, sender, response) {
+        if (request.message === "open") {
+            sendInput();
+        } response({
+            data: "Context: We detected you (Popup), text sent."
+        })
+    }
+);
+
+/**
+ * Send the text from the 5 paragraphs (input data) to the popup for processing.
+ */
+function sendInput() {
+    chrome.runtime.sendMessage({
+        message: "send_input",
+        summarization_input: summarization_input
+    }, function(response) {
+        console.log(response.data)
+    });
+}
+
+/**
+ * Get the extractive summurization output from the popup to highlight the page.
+ */
+chrome.runtime.onMessage.addListener(
+    function(request, sender, response) {
+        if (request.message === "extractive result") {
+            // console.log('Extractive Output: ' + request.extractiveOutput)
+            highlightPage(request.extractiveOutput)
+        } response({
+            data: "Context: We've recieved your extractive results. Highlighting paragraph."
+        })
+    }
+);
+
+/**
+ * Highlight the sentences on the page that are provided by the extractive output.
+ * @param {*} extractiveOutput - The sentences the BERT model used to summurize the input text.
+ */
+ function highlightPage(extractiveOutput) {
+
+    for (sentence of extractiveOutput) {
+        console.log('Extracted sentence: ' + sentence)
+    }
     let updatedTexts = {}
     for (let i = 0; i < validTexts.length; i++) {
         let textNum = 'valid-paragraph-' + i 
@@ -36,7 +91,7 @@ function highlightPage(extractiveOutput) {
             if (validTexts[i].includes(sentence)) {
                 console.log('Sentence found: ' + sentence)
                 let regex = new RegExp(sentence,'g');
-                if (updatedTexts[textNum]) { //////////////// how to check if key exists in dict
+                if (updatedTexts[textNum]) {
                     prevUpdatedText = updatedTexts[textNum];
                     newText =  prevUpdatedText.replace(regex,'<mark>'+ sentence +'</mark>' );
                     updatedTexts[textNum] = newText;
@@ -50,46 +105,12 @@ function highlightPage(extractiveOutput) {
     for (const [key, value] of Object.entries(updatedTexts)) {
         document.getElementById(key).innerHTML = value;
     }
-    let marks = document.getElementsByTagName('mark');
-    for (let mark of marks) {
-        if (mark.outerHTML.includes('valid-paragraph-')) {
-            mark.style['background-color'] = '#FF00FF'
-        }
-    }
     sendHighlightConfirmation()
 }
 
-chrome.runtime.onMessage.addListener(
-    function(request, sender, response) {
-        if (request.message === "open") {
-            sendInput();
-        }
-        response({
-            data: "Context: We detected you (Popup), text sent."
-        })
-    }
-);
-
-function sendInput() {
-    chrome.runtime.sendMessage({
-        message: "send_input",
-        summarization_input: summarization_input
-    }, function(response) {
-        console.log(response.data)
-    });
-}
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, response) {
-        if (request.message === "extractive result") {
-            console.log('Extractive Output: ' + request.extractiveOutput)
-            highlightPage(request.extractiveOutput)
-        } response({
-            data: "Context: We've recieved your extractive results. Highlighting paragraph."
-        })
-    }
-);
-
+/**
+ * Send a message to the popup to confirm highlighting is complete.
+ */
 function sendHighlightConfirmation() {
     chrome.runtime.sendMessage({
         message: "confirm_highlight",

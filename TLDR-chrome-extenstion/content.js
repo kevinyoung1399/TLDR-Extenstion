@@ -1,4 +1,4 @@
-console.log('Hello')
+console.log('TLDR Extension is ready.')
 
 function convertToPlain(html) {
     let tempDivElement = document.createElement("div");
@@ -6,21 +6,57 @@ function convertToPlain(html) {
     return tempDivElement.textContent || tempDivElement.innerText || "";
 }
 
-let paragraphs = document.getElementsByTagName('p');
-let texts = new Array (5);
+const paragraphs = document.getElementsByTagName('p');
+let validTexts = new Array (5);
+// change to camel case
 let summarization_input = ''
-let num_valid_paragraphs = 0;
-for (const paragraph of paragraphs) {
-    if (num_valid_paragraphs > 4) {
+let i = 0
+for (let paragraph of paragraphs) {
+    if (i > 4) {
         break;
     } else {
         let text = convertToPlain(paragraph.innerHTML);
         if (text.length > 20 && text.length < 2000) {
-            texts[num_valid_paragraphs] = text
+            validTexts[i] = text
             summarization_input += text + ' '
-            num_valid_paragraphs += 1;
+            id_name = 'valid-paragraph-' + i
+            paragraph.id = id_name
+            paragraph.className = 'tldr'
+            i += 1;
+            // console.log('valid paragraph ' + id_name)
         }
     }
+}
+
+function highlightPage(extractiveOutput) {
+    let updatedTexts = {}
+    for (let i = 0; i < validTexts.length; i++) {
+        let textNum = 'valid-paragraph-' + i 
+        for (sentence of extractiveOutput) {
+            if (validTexts[i].includes(sentence)) {
+                console.log('Sentence found: ' + sentence)
+                let regex = new RegExp(sentence,'g');
+                if (updatedTexts[textNum]) { //////////////// how to check if key exists in dict
+                    prevUpdatedText = updatedTexts[textNum];
+                    newText =  prevUpdatedText.replace(regex,'<mark>'+ sentence +'</mark>' );
+                    updatedTexts[textNum] = newText;
+                } else {
+                    newText =  validTexts[i].replace(regex,'<mark>'+ sentence +'</mark>' );
+                    updatedTexts[textNum] = newText;
+                }
+            }
+        }   
+    }
+    for (const [key, value] of Object.entries(updatedTexts)) {
+        document.getElementById(key).innerHTML = value;
+    }
+    let marks = document.getElementsByTagName('mark');
+    for (let mark of marks) {
+        if (mark.outerHTML.includes('valid-paragraph-')) {
+            mark.style['background-color'] = '#FF00FF'
+        }
+    }
+    sendHighlightConfirmation()
 }
 
 chrome.runtime.onMessage.addListener(
@@ -34,7 +70,7 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-async function sendInput() {
+function sendInput() {
     chrome.runtime.sendMessage({
         message: "send_input",
         summarization_input: summarization_input
@@ -46,23 +82,18 @@ async function sendInput() {
 chrome.runtime.onMessage.addListener(
     function(request, sender, response) {
         if (request.message === "extractive result") {
-            console.log(request.extractiveOutput)
+            console.log('Extractive Output: ' + request.extractiveOutput)
+            highlightPage(request.extractiveOutput)
         } response({
-            data: "Context: We recieved your extractive results. Highlighting paragraph."
+            data: "Context: We've recieved your extractive results. Highlighting paragraph."
         })
     }
 );
 
-
-// chrome.runtime.onMessage.addListener(
-//     function(request, sender, sendResponse) {
-//         if (request.message === "autoFill")
-//             autoFill(request.textToFill);
-//     }
-// );
-
-// async function autoFill(textToFill){ // here write your function...
-//     console.log(textToFill)
-// }
-
-// elt.style['background-color'] = '#FF00FF'
+function sendHighlightConfirmation() {
+    chrome.runtime.sendMessage({
+        message: "confirm_highlight",
+    }, function(response) {
+        // console.log(response.confirmation)
+    });
+}

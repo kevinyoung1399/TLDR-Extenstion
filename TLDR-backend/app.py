@@ -8,6 +8,7 @@ from summarizers.extractive import Extractive
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route("/")
 def home():
     """
@@ -21,7 +22,7 @@ def handle_extractive():
     """
     Process extractiveSummarize POST request.
     """
-    if not request.json or not 'paragraphs' in request.json:
+    if not request.json or 'paragraphs' not in request.json:
         abort(400, 'No data found to summarize.')
     ext = Extractive(request.json['paragraphs'])
     # summarizations = ext.collect_summarizations()
@@ -34,7 +35,7 @@ def handle_abstractive():
     """
     Process abstractiveSummarize POST request.
     """
-    if not request.json or not 'paragraphs' in request.json:
+    if not request.json or 'paragraphs' not in request.json:
         abort(400, 'No data found to summarize.')
     abst = Abstractive(request.json['paragraphs'])
     summarizations = abst.collect_summarizations()

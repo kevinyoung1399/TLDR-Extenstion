@@ -6,7 +6,7 @@ from summarizers.extractive import Extractive
 
 
 app = Flask(__name__)
-CORS(app)s
+CORS(app)
 
 
 @app.route("/")

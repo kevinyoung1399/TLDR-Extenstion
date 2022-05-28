@@ -21,6 +21,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint
+        pip install transformers
+        pip install torch
+        pip install tensorflow
+        pip install bert-extractive-summarizer
+        pip install sacremoses
+        pip install flask
+        pip install flask_cors
+       
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')

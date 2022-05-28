@@ -1,7 +1,7 @@
 """BertSum model , available to use as a Python module, for the BertSum summarizations."""
 from summarizer import Summarizer
 
-class Extractive:
+class extractive:
     """
     A class to process extractive summarizations using BertSum 
     (Fine-tune BERT for Extractive Summarization - Yang Liu).

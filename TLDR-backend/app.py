@@ -1,8 +1,8 @@
 """Flask, a web framework used for processing the POST requests. """
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-from summarizers.abstractive import Abstractive
-from summarizers.extractive import Extractive
+from abstractive import Abstractive
+from extractive import Extractive
 
 
 app = Flask(__name__)

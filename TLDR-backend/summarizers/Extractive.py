@@ -1,5 +1,7 @@
-"""BertSum model , available to use as a Python module, for the BertSum summarizations."""
+"""BertSum model ,
+available to use as a Python module, for the BertSum summarizations."""
 from summarizer import Summarizer
+
 
 class Extractive:
     """
@@ -14,7 +16,6 @@ class Extractive:
         sentences that are output from the BertSum, used for the summarization.
 
     """
-
 
     def __init__(self, input_paragraphs):
         """

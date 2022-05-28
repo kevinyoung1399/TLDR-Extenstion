@@ -1,12 +1,12 @@
 """Flask, a web framework used for processing the POST requests. """
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-from summarizers.abstractive import abstractive
-from summarizers.extractive import extractive
+from summarizers.abstractive import Abstractive
+from summarizers.extractive import Extractive
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)s
 
 
 @app.route("/")
@@ -24,7 +24,7 @@ def handle_extractive():
     """
     if not request.json or 'paragraphs' not in request.json:
         abort(400, 'No data found to summarize.')
-    ext = extractive(request.json['paragraphs'])
+    ext = Extractive(request.json['paragraphs'])
     # summarizations = ext.collect_summarizations()
     summarizations = ext.extract()
     return jsonify({'summarizations': summarizations})
@@ -37,6 +37,6 @@ def handle_abstractive():
     """
     if not request.json or 'paragraphs' not in request.json:
         abort(400, 'No data found to summarize.')
-    abst = abstractive(request.json['paragraphs'])
+    abst = Abstractive(request.json['paragraphs'])
     summarizations = abst.collect_summarizations()
     return jsonify({'summarizations': summarizations})

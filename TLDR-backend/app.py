@@ -16,10 +16,11 @@ def handleExtractive():
     if not request.json or not 'paragraphs' in request.json:
         abort(400, 'No data found to summarize.')
     ext = Extractive(request.json['paragraphs'])
-    summarizations = ext.collect_summarizations()
+    # summarizations = ext.collect_summarizations()
+    summarizations = ext.extract()
     return jsonify({'summarizations': summarizations})
 
-@app.route("/abstractiveSummarize", methods=['POST'], endpoint='abstrictive')
+@app.route("/abstractiveSummarize", methods=['POST'], endpoint='abstractive')
 def handleAbstractive():
     if not request.json or not 'paragraphs' in request.json:
         abort(400, 'No data found to summarize.')

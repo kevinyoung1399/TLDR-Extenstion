@@ -16,7 +16,6 @@ function convertToPlain(html) {
  */
 const paragraphs = document.getElementsByTagName('p');
 let validTexts = new Array (5);
-// change to camel case
 let summarization_input = ''
 let i = 0
 for (let paragraph of paragraphs) {
@@ -80,23 +79,28 @@ chrome.runtime.onMessage.addListener(
  * @param {*} extractiveOutput - The sentences the BERT model used to summurize the input text.
  */
  function highlightPage(extractiveOutput) {
-
-    for (sentence of extractiveOutput) {
-        console.log('Extracted sentence: ' + sentence)
+    let output_sentences = []
+    for (sent of extractiveOutput) {
+        let new_sents = sent.toString().split('\n')
+        for (const new_sent of new_sents) {
+            if (new_sent.length > 5) {
+                output_sentences.push(new_sent.trim());
+            }
+        }
     }
+
     let updatedTexts = {}
     for (let i = 0; i < validTexts.length; i++) {
-        let textNum = 'valid-paragraph-' + i 
-        for (sentence of extractiveOutput) {
+        let textNum = 'valid-paragraph-' + i
+        for (const sentence of output_sentences) {
             if (validTexts[i].includes(sentence)) {
                 console.log('Sentence found: ' + sentence)
-                let regex = new RegExp(sentence,'g');
                 if (updatedTexts[textNum]) {
                     prevUpdatedText = updatedTexts[textNum];
-                    newText =  prevUpdatedText.replace(regex,'<mark>'+ sentence +'</mark>' );
+                    newText =  prevUpdatedText.replace(sentence,'<mark>'+ sentence +'</mark>' );
                     updatedTexts[textNum] = newText;
                 } else {
-                    newText =  validTexts[i].replace(regex,'<mark>'+ sentence +'</mark>' );
+                    newText =  validTexts[i].replace(sentence,'<mark>'+ sentence +'</mark>' );
                     updatedTexts[textNum] = newText;
                 }
             }

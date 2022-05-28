@@ -1,7 +1,11 @@
-input must be between 200 to 2000 characters
+TODO:
 
-must replace double quotes with single quotes
+Use Spacy/NLP alternative to splitting sentences for extractive
+Session saving on Popup
+Create better UI for Popup
+Threading on flask to run extractive and abstractive in parallel
 
-remove / symbol from input
 
-update 
+Future possible features:
+
+Read the whole page of text instead of the first 5 paragraphs - difficult issue as there is a token limit on extractive/abstractive summurization. Perhaps running several summurizations then combining may work?

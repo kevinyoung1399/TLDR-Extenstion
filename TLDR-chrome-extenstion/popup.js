@@ -31,16 +31,19 @@ let summarizationInput = ''
  * @param {String} input 
  */
 function setSummarizationInput(input) {
-  summarizationInput = input
-  console.log('Summarization Input: ' + summarizationInput)
+  summarizationInput = input.replace("\n", "");
+  console.log('Summarization Input: ' + summarizationInput);
 }
 
 // document.getElementById("test").addEventListener("click", test);
 // function test() {
 //   document.getElementById('test').style.display = "none";
 //   sendExtractiveToContext([
-//     'Some design choices and experiences for Blender were carried over from an earlier software application, called Traces, that Roosendaal developed for NeoGeo on the Commodore Amiga platform during the 1987–1991 period',
-//     'The name Blender was inspired by a song by the Swiss electronic band Yello, from the album Baby, which NeoGeo used in its showreel.'
+//     'Blender is a free and open-source 3D computer graphics software toolset used for creating animated films, visual effects, art, 3D-printed models, motion graphics, interactive 3D applications, virtual reality, and, formerly, video games',
+//     'The name Blender was inspired by a song by the Swiss electronic band Yello, from the album Baby, which NeoGeo used in its showreel.',
+//     '[14][15][16] Some design choices and experiences for Blender were carried over from an earlier software application, called Traces, that Roosendaal developed for NeoGeo on the Commodore Amiga platform during the 1987–1991 period',
+//     '[17]\n On January 1, 1998, Blender was released publicly online as SGI freeware',
+//     '[1] NeoGeo was later dissolved, and its client contracts were taken over by another company'
 //   ])
 // }
 

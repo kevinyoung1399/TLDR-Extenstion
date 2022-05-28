@@ -1,15 +1,24 @@
-body {
-    background-color: powderblue;
-}
+all {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
 h1 {
-color: blue;
+    color: rgb(250, 140, 197);
+    text-align: center
 }
-#abstractive-sum-1 {
-color: rgb(168, 82, 42);
+
+button {
+    transition-duration: 0.4s;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(250, 140, 197);
 }
-#abstractive-sum-2 {
-color: rgb(115, 40, 185)
+  
+button:hover {
+    background-color: rgb(250, 140, 197);
+    color: white;
 }
-#abstractive-sum-3 {
-color: rgb(32, 144, 178);
+
+#abstractive-sum {
+    background-color: rgb(255, 181, 219);
 }

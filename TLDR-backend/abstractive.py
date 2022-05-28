@@ -4,7 +4,7 @@ from transformers import pipeline
 
 class Abstractive:
     """
-    A class to process abstractive summarizations using BART
+    A class to process abstractive summarizations using BART.
     ...
     Attributes
     ----------

@@ -39,7 +39,7 @@ jobs:
     elastic_beanstalk_pipeline:
        runs-on: ubuntu-latest
        environment: development
-       needs: [my_ci_pipeline]
+       needs: [s3_bucket_pipeline]
        
        steps:
          - name: Configure my AWS Credentils

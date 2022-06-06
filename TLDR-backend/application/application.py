@@ -1,12 +1,10 @@
 """Flask, a web framework used for processing the POST requests. """
 from flask import Flask, jsonify, request, abort
-from flask_cors import CORS
 from abstractive import collect_abstractive_summarizations
 from extractive import extract
 
 
-app = Flask(__name__)
-CORS(app)
+application = Flask(__name__)
 
 
 @app.route("/")
@@ -17,7 +15,7 @@ def home():
     return "Hello, Flask!"
 
 
-@app.route("/extractiveSummarize", methods=['POST'], endpoint='extractive')
+@application.route("/extractiveSummarize", methods=['POST'], endpoint='extractive')
 def handle_extractive():
     """
     Process extractiveSummarize POST request.
@@ -29,7 +27,7 @@ def handle_extractive():
     return jsonify({'summarizations': summarizations})
 
 
-@app.route("/abstractiveSummarize", methods=['POST'], endpoint='abstractive')
+@application.route("/abstractiveSummarize", methods=['POST'], endpoint='abstractive')
 def handle_abstractive():
     """
     Process abstractiveSummarize POST request.
@@ -39,3 +37,6 @@ def handle_abstractive():
     summarizations = collect_abstractive_summarizations(
         request.json['paragraphs'])
     return jsonify({'summarizations': summarizations})
+
+if __name__ == "__main__":
+    application.run(host="0.0.0.0", port=8080)

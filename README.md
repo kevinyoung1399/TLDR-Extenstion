@@ -4,8 +4,6 @@ A Chrome Extension that summarises text in web pages using  BERTSum and BART lan
 
 ![TLDR](./images/tldr_demo.JPG?raw=true "TLDR")
 
-## Notes
-
 ## Contact Me
 
 kevinyoung1399@gmail.com

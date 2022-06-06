@@ -19,9 +19,12 @@ jobs:
        steps:
          - name: Git clone our repository
            uses: actions/checkout@v1
+   
+         - name: Go to application files
+           run : cd ./TLDR-backend/application
             
          - name: Create ZIP deployment package
-           run : zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./TLDR-backend/application/  -x  *.git*
+           run : zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./  -x  *.git*
            
          - name: Configure my AWS Credentils
            uses: aws-actions/configure-aws-credentials@v1

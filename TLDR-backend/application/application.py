@@ -7,7 +7,7 @@ from extractive import extract
 application = Flask(__name__)
 
 
-@app.route("/")
+@application.route("/")
 def home():
     """
     GET request to verify Flask server is running.
@@ -39,4 +39,4 @@ def handle_abstractive():
     return jsonify({'summarizations': summarizations})
 
 if __name__ == "__main__":
-    application.run(host="0.0.0.0", port=8080)
+    application.run()
